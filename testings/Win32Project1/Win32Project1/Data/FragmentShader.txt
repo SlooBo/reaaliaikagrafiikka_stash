@@ -1,0 +1,28 @@
+uniform float time;
+//uniform vec3 lightPos;
+uniform vec2 Resolution;
+uniform vec4 lightColor;
+uniform vec4 ambientColor;
+uniform vec3 fallOff;
+
+uniform float unifAlpha;
+
+uniform sampler2D tex;
+uniform sampler2D norm;	
+
+varying vec3 Color;
+varying vec3 Position;
+varying vec2 Texcoord;
+varying vec3 lightPos;
+varying float LightIntensity;
+
+void main()
+{
+
+	vec3 lightColor = vec3(texture2D(tex, Texcoord));
+
+	gl_FragColor = vec4(lightColor * LightIntensity, 1.0);
+	gl_FragColor.a = unifAlpha;
+
+	//gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+}
