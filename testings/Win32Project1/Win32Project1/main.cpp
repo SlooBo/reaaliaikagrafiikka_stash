@@ -468,8 +468,8 @@ int main()
 	std::vector<unsigned int>obj_uvs_elements;
 	std::vector<unsigned int>obj_normals_elements;
 
-	bool res = loadOBJ("Data/Cube.obj", obj_vertices, obj_uvs, obj_normals, obj_vertices_elements, obj_uvs_elements, obj_normals_elements);
-	/*
+	bool res = loadOBJ("Data/object.obj", obj_vertices, obj_uvs, obj_normals, obj_vertices_elements, obj_uvs_elements, obj_normals_elements);
+	
 	std::vector<double>news;
 	for (unsigned int i = 0; i < obj_vertices.size(); i++)
 	{
@@ -479,14 +479,14 @@ int main()
 		news.push_back(obj_uvs[i].x);
 		news.push_back(obj_uvs[i].y);
 	}
-	*/
+	
 	GLuint vboId;
 	glGenBuffers(1, &vboId);
 	glBindBuffer(GL_ARRAY_BUFFER, vboId);
 	glBufferData(GL_ARRAY_BUFFER, obj_vertices.size() * sizeof(glm::vec3), &obj_vertices[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0u);
 	vbob.push_back(vboId);
-	/*
+	
 	glGenBuffers(1, &vboId);
 	glBindBuffer(GL_ARRAY_BUFFER, vboId);
 	glBufferData(GL_ARRAY_BUFFER, news.size() * sizeof(GLfloat), &news[0], GL_STATIC_DRAW);
@@ -505,12 +505,12 @@ int main()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, obj_vertices_elements.size() * sizeof(int), &obj_vertices_elements[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0u);
 	ebob.push_back(eboId);
-	*/
-	/*
+	
+	
 	size = sizeof(indices);
 	ebo = createEbo(&indices[0], size);
 	ebob.push_back(ebo);
-	*/
+	
 
 	//textures
 	GLuint texture_diffuse, texture_normal;
@@ -525,7 +525,7 @@ int main()
 
 	glGenTextures(1, &texture_normal);
 	std::vector<unsigned char> image2;
-	error = lodepng::decode(image2, width, height, "testings_norm.png");
+	error = lodepng::decode(image2, width, height, "Data/tiles_norm.png");
 	assert(error == 0);
 
 	init2DTexture(texture_normal, width, height, image2.data());
@@ -544,7 +544,7 @@ int main()
 	glUniform1i(normal, texture_normal);
 	
 	GLuint lightpos = glGetUniformLocation(programId, "lightPos");
-	glUniform3f(lightpos, 0.0f, 0.0f, 1.0f);
+	glUniform3f(lightpos, 0.5f, 0.0f, 0.5f);
 	GLuint resolution = glGetUniformLocation(programId, "Resolution");
 	glUniform2f(resolution, 800, 800);
 	GLuint lightcolor = glGetUniformLocation(programId, "lightColor");
@@ -701,14 +701,14 @@ int main()
 		worldTransform = glm::rotate(rotation, glm::vec3(0.0f, 1.0f, 0.0f)) *  glm::translate(glm::vec3(0.0f, 2.0f, 0.0f));
 		glUniformMatrix4fv(worldIndex, 1, GL_FALSE, reinterpret_cast<float*>(&worldTransform));
 		
-		/*
+		
 		glBindBuffer(GL_ARRAY_BUFFER, vbob[3]);
 		glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, NULL, 0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vbob[4]);
 		glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, NULL, 0);
-		*/
-		/*
+		
+		
 		glBindBuffer(GL_ARRAY_BUFFER, vbob[5]);
 		glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
 		glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
@@ -717,11 +717,11 @@ int main()
 		int element_size;
 		glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &element_size);
 		
-		//renderFrame(asd, time, element_size); // size/sizeof(GLushort)
+		renderFrame(asd, time, element_size/sizeof(GLushort)); // size/sizeof(GLushort)
 		glDrawElements(GL_TRIANGLES, element_size / sizeof(GLushort), GL_UNSIGNED_INT, 0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0u);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0u);
-		*/
+		
 		/*
 		//palikka1
 		worldTransform = glm::translate(glm::vec3(0.0f, 2.0f, 0.0f))  * glm::rotate(rotation, glm::vec3(1.0f, 0.0f, 1.0f));
